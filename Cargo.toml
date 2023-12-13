@@ -5,7 +5,7 @@ edition = "2021"
 authors = ["Shea Frembling"]
 description = "A tiny crate used for timing individual functions"
 license = "MIT"
-license-file = "LICENSE"
+repository = "https://github.com/sfrembling/timer"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
