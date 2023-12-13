@@ -23,11 +23,13 @@ use std::time::Duration;
 macro_rules! timer {
     ($function:expr $(, $arg:expr)*) => {
         {
+            use $crate::TimerResult;
             let watch = std::time::Instant::now();
             let result = $function($($arg, )*);
             TimerResult {
                 time: watch.elapsed(),
-                result
+                result,
+                name: stringify!($function).to_owned()
             }
         }
     };
@@ -39,11 +41,13 @@ pub struct TimerResult<T> {
     pub time: Duration,
     /// The result returned by the function's execution.
     pub result: T,
+    /// The name of the executed function.
+    pub name: String,
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::timer;
 
     #[test]
     fn result_works() {
@@ -71,5 +75,16 @@ mod tests {
         let result = timer!(perform_ops, -2, 5);
 
         assert_eq!(result.result, 5);
+    }
+
+    #[test]
+    fn name_works() {
+        fn does_something() {
+            let _ = String::new();
+        }
+
+        let result = timer!(does_something);
+
+        assert_eq!(&result.name, "does_something");
     }
 }
