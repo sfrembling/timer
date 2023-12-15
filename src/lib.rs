@@ -10,11 +10,13 @@ use std::time::Duration;
 ///
 /// Example:
 /// ```
+/// use ttimer::timer;
+///
 /// fn do_something(s: &str) -> u32 {
 ///     s.chars().count() as u32
 /// }
 ///
-/// let x: TimerResult<u32> = timer!(do_something, "Hello, world!");
+/// let x = timer!(do_something, "Hello, world!");
 ///
 /// println!("Took {} ns to execute", x.time.as_nanos());
 /// assert_eq!(x.result, 13);
@@ -36,6 +38,7 @@ macro_rules! timer {
 }
 
 /// The result of using the `timer!` macro.
+#[derive(Debug, Clone)]
 pub struct TimerResult<T> {
     /// The time it took for the function to execute.
     pub time: Duration,
@@ -43,6 +46,26 @@ pub struct TimerResult<T> {
     pub result: T,
     /// The name of the executed function.
     pub name: String,
+}
+
+impl<T> TimerResult<T> {
+    /// Quickly print the result of the timer to StdOut
+    ///
+    /// Prints in the format: `{name} done in {time} ms`
+    ///
+    /// Example:
+    /// ```
+    /// use ttimer::timer;
+    ///
+    /// fn do_something() -> i32 {
+    ///     0 // pretend this is some interesting function
+    /// }
+    ///
+    /// timer!(do_something).view();
+    /// ```
+    pub fn view(&self) {
+        println!("{} done in {} ms", self.name, self.time.as_millis());
+    }
 }
 
 #[cfg(test)]
