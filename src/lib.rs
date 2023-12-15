@@ -1,3 +1,30 @@
+//! A tiny crate for timing / benchmarking your Rust functions
+//!
+//! Example:
+//! ```
+//! use ttimer::*;
+//!
+//! fn fib(n: u32) -> u32 {
+//!     if n < 2 {
+//!         n
+//!     } else {
+//!         fib(n - 1) + fib(n - 2)
+//!     }
+//! }
+//!
+//! // Time the function `fib` with the input `40`
+//! let result = timer!(fib, 40);
+//!
+//! assert_eq!(result.name, "fib");
+//! assert_eq!(result.result, 102334155);
+//!
+//! println!("{} took {} ms to complete", result.name, result.time.as_millis());
+//!
+//! // You can also quickly print out the runtime information.
+//! // This code will print "fib done in {some_time} ms"
+//! timer!(fib, 25).view();
+//! ```
+
 use std::time::Duration;
 
 /// A simple macro for timing a function.
